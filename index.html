@@ -8,36 +8,71 @@
 <body>
 <div id="content"></div>
 <script type="text/jsx">
-  var APP = React.createClass({
+  var people = [
+    {
+      name: "Jesse Gavin",
+      avatar: "http://www.gravatar.com/avatar/09e59b0f8ac4ce9f50db49dc35cedb17?s=240"
+    },
+    {
+      name: "Jason Reed",
+      avatar: "http://www.gravatar.com/avatar/75cdf65286614aa22854444de01ad1f8?s=240"
+    },
+    {
+      name: "Scott Canham",
+      avatar: "http://www.gravatar.com/avatar/b1cf696a73fff46088578bd62f9e5ac7?s=240"
+    },
+    {
+      name: "Terry Guan",
+      avatar: "http://www.gravatar.com/avatar/1658de1584d46db88bc606fc2b6ac115?s=240"
+    },
+    {
+      name: "Chris Montgomery",
+      avatar: "http://www.gravatar.com/avatar/9ab0ef003e641be2dfe11239b0a33059?s=240"
+    },
+    {
+      name: "Bob Galuska",
+      avatar: "http://www.gravatar.com/avatar/09e27db892729244f2f2c9370cddfa1f?s=240"
+    }
+  ];
+
+  var Card = React.createClass({
+    render: function () {
+      return (
+          <div>
+            <h1>{this.props.name}</h1>
+            <img src={this.props.avatar} />
+            <br/>
+            <button onClick={this.props.onClick}>Delete Me</button>
+          </div>
+      )
+    }
+  });
+
+  var App = React.createClass({
     getInitialState: function () {
       return {
-        txt: 'Initial Hello'
-      }
+        people: people
+      };
     },
-    updateTxt: function (e) {
-      this.setState({
-        txt: e.target.value
-      })
+    deleteMe: function(person) {
+      this.state.people.splice(this.state.people.indexOf(person), 1);
+      this.setState(this.state);
     },
     render: function () {
+      var self = this;
       return (
           <div>
-            <Widget txt={this.state.txt} update={this.updateTxt} />
+          {this.state.people.map(function (person) {
+            return (
+                <Card name={person.name} avatar={person.avatar} onClick={self.deleteMe.bind(null, person)}></Card>
+            )
+          })}
           </div>
       )
     }
   });
-  var Widget = React.createClass({
-    render: function () {
-      return (
-          <div>
-            <input type="text" onChange={this.props.update} />
-            <h1>{this.props.txt}</h1>
-          </div>
-      )
-    }
-  });
-  React.renderComponent(<APP />, document.getElementById('content'));
+
+  React.renderComponent(<App/>, document.getElementById('content'));
 </script>
 </body>
 </html>
